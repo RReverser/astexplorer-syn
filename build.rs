@@ -50,11 +50,12 @@ mod types {
     impl ToTokens for Node {
         fn to_tokens(&self, tokens: &mut TokenStream) {
             let ident = &self.ident;
+            let ident_as_str = &ident.0;
 
             let data = match &self.data {
                 Data::Private => {
                     quote! {
-                        object! {}
+                        object! { type: #ident_as_str }
                     }
                 }
                 Data::Struct(fields) => {
@@ -73,6 +74,7 @@ mod types {
 
                     quote! {
                         object! {
+                            type: #ident_as_str,
                             #(#fields,)*
                         }
                     }
