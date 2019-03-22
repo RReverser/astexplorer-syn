@@ -31,7 +31,7 @@ mod types {
 
                 tokens.append_all(quote! {
                     impl ToJS for syn::token::#key {
-                        fn to_js(&self) -> JsValue {
+                        fn to_js(self) -> JsValue {
                             #key_as_str.to_js()
                         }
                     }
@@ -117,7 +117,7 @@ mod types {
 
             tokens.append_all(quote! {
                 impl ToJS for syn::#ident {
-                    fn to_js(&self) -> JsValue {
+                    fn to_js(self) -> JsValue {
                         #data
                     }
                 }
