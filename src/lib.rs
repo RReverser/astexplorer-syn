@@ -12,14 +12,6 @@ extern "C" {
     fn set(this: &Object, key: &str, value: JsValue);
 }
 
-macro_rules! object {
-    ($($name:ident: $value:expr),* $(,)?) => {{
-        let obj = Object::new();
-        $(obj.set(stringify!($name), $value.to_js());)*
-        JsValue::from(obj)
-    }};
-}
-
 #[wasm_bindgen]
 extern "C" {
     type Array;
@@ -31,13 +23,13 @@ extern "C" {
     fn set(this: &Array, key: u32, value: JsValue);
 }
 
-macro_rules! array {
-    (@count $first:expr, $($value:expr,)*) => (1u32 + array!(@count $($value,)*));
+macro_rules! js {
+    (@count $first:expr, $($value:expr,)*) => (1u32 + js!(@count $($value,)*));
 
     (@count) => (0u32);
 
-    ($($value:expr),* $(,)?) => {{
-        let arr = Array::new(array!(@count $($value,)*));
+    ([$($value:expr),* $(,)?]) => {{
+        let arr = Array::new(js!(@count $($value,)*));
         let mut i = 0_u32;
         $(
             arr.set(i, $value.to_js());
@@ -45,6 +37,13 @@ macro_rules! array {
         )*
         let _ = i;
         JsValue::from(arr)
+    }};
+
+    ($ty:ident { $($name:ident: $value:expr),* $(,)? }) => {{
+        let obj = Object::new();
+        obj.set("type", stringify!($ty).to_js());
+        $(obj.set(stringify!($name), $value.to_js());)*
+        JsValue::from(obj)
     }};
 }
 
@@ -136,13 +135,13 @@ impl ToJS for String {
 
 impl<A: ToJS, B: ToJS> ToJS for (A, B) {
     fn to_js(&self) -> JsValue {
-        array![self.0, self.1]
+        js!([self.0, self.1])
     }
 }
 
 impl<A: ToJS, B: ToJS, C: ToJS> ToJS for (A, B, C) {
     fn to_js(&self) -> JsValue {
-        array![self.0, self.1, self.2]
+        js!([self.0, self.1, self.2])
     }
 }
 
@@ -154,19 +153,19 @@ impl ToJS for proc_macro2::Ident {
 
 impl ToJS for proc_macro2::LineColumn {
     fn to_js(&self) -> JsValue {
-        object! {
+        js!(LineColumn {
             line: self.line as u32,
             column: self.column as u32,
-        }
+        })
     }
 }
 
 impl ToJS for proc_macro2::Span {
     fn to_js(&self) -> JsValue {
-        object! {
+        js!(Span {
             start: self.start(),
             end: self.end(),
-        }
+        })
     }
 }
 
@@ -182,25 +181,25 @@ impl<T: ToJS, P> ToJS for syn::punctuated::Punctuated<T, P> {
 
 impl ToJS for syn::token::Group {
     fn to_js(&self) -> JsValue {
-        object! { type: "Group", span: self.span }
+        js!(Group { span: self.span })
     }
 }
 
 impl ToJS for syn::token::Paren {
     fn to_js(&self) -> JsValue {
-        object! { type: "Paren", span: self.span }
+        js!(Paren { span: self.span })
     }
 }
 
 impl ToJS for syn::token::Brace {
     fn to_js(&self) -> JsValue {
-        object! { type: "Brace", span: self.span }
+        js!(Brace { span: self.span })
     }
 }
 
 impl ToJS for syn::token::Bracket {
     fn to_js(&self) -> JsValue {
-        object! { type: "Bracket", span: self.span }
+        js!(Bracket { span: self.span })
     }
 }
 

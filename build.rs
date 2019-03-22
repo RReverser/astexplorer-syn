@@ -27,15 +27,12 @@ mod types {
         fn to_tokens(&self, tokens: &mut TokenStream) {
             tokens.append_all(&self.types);
             for key in self.tokens.keys() {
-                let key_as_str = &key.0;
-
                 tokens.append_all(quote! {
                     impl ToJS for syn::token::#key {
                         fn to_js(&self) -> JsValue {
-                            object! {
-                                type: #key_as_str,
+                            js!(#key {
                                 span: self.span()
-                            }
+                            })
                         }
                     }
                 });
@@ -53,12 +50,11 @@ mod types {
     impl ToTokens for Node {
         fn to_tokens(&self, tokens: &mut TokenStream) {
             let ident = &self.ident;
-            let ident_as_str = &ident.0;
 
             let data = match &self.data {
                 Data::Private => {
                     quote! {
-                        object! { type: #ident_as_str }
+                        js!(#ident {})
                     }
                 }
                 Data::Struct(fields) => {
@@ -76,38 +72,32 @@ mod types {
                         });
 
                     quote! {
-                        object! {
-                            type: #ident_as_str,
+                        js!(#ident {
                             #(#fields,)*
-                        }
+                        })
                     }
                 }
                 Data::Enum(variants) => {
                     let matches = variants.iter().map(|(variant, types)| {
-                        let variant_as_str = &variant.0;
-
-                        let variant = quote! {
+                        let variant_path = quote! {
                             syn::#ident::#variant
                         };
 
                         match types.len() {
                             0 => quote! {
-                               #variant => object! {
-                                   type: #variant_as_str
-                               }
+                               #variant_path => js!(#variant {})
                             },
                             1 => quote! {
-                               #variant(x) => x.to_js()
+                               #variant_path(x) => x.to_js()
                             },
                             _ => {
                                 let payload = (0..types.len()).map(|i| Ident(format!("x{}", i)));
                                 let payload = quote! { (#(#payload),*) };
 
                                 quote! {
-                                    #variant #payload => object! {
-                                        type: #variant_as_str,
+                                    #variant_path #payload => js!(#variant {
                                         values: #payload
-                                    }
+                                    })
                                 }
                             }
                         }
