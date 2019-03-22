@@ -31,7 +31,7 @@ impl ToJS for syn::Arm {
 impl ToJS for syn::AttrStyle {
     fn to_js(self) -> JsValue {
         match self {
-            syn::AttrStyle::Outer => "Outer".to_js(),
+            syn::AttrStyle::Outer => object! { type : "Outer" },
             syn::AttrStyle::Inner(x) => x.to_js(),
         }
     }
@@ -408,7 +408,7 @@ impl ToJS for syn::Fields {
         match self {
             syn::Fields::Named(x) => x.to_js(),
             syn::Fields::Unnamed(x) => x.to_js(),
-            syn::Fields::Unit => "Unit".to_js(),
+            syn::Fields::Unit => object! { type : "Unit" },
         }
     }
 }
@@ -903,7 +903,7 @@ impl ToJS for syn::Path {
 impl ToJS for syn::PathArguments {
     fn to_js(self) -> JsValue {
         match self {
-            syn::PathArguments::None => "None".to_js(),
+            syn::PathArguments::None => object! { type : "None" },
             syn::PathArguments::AngleBracketed(x) => x.to_js(),
             syn::PathArguments::Parenthesized(x) => x.to_js(),
         }
@@ -945,7 +945,7 @@ impl ToJS for syn::RangeLimits {
 impl ToJS for syn::ReturnType {
     fn to_js(self) -> JsValue {
         match self {
-            syn::ReturnType::Default => "Default".to_js(),
+            syn::ReturnType::Default => object! { type : "Default" },
             syn::ReturnType::Type(x0, x1) => object! { type : "Type" , values : ( x0 , x1 ) },
         }
     }
@@ -968,7 +968,7 @@ impl ToJS for syn::TraitBound {
 impl ToJS for syn::TraitBoundModifier {
     fn to_js(self) -> JsValue {
         match self {
-            syn::TraitBoundModifier::None => "None".to_js(),
+            syn::TraitBoundModifier::None => object! { type : "None" },
             syn::TraitBoundModifier::Maybe(x) => x.to_js(),
         }
     }
@@ -1189,7 +1189,7 @@ impl ToJS for syn::Visibility {
             syn::Visibility::Public(x) => x.to_js(),
             syn::Visibility::Crate(x) => x.to_js(),
             syn::Visibility::Restricted(x) => x.to_js(),
-            syn::Visibility::Inherited => "Inherited".to_js(),
+            syn::Visibility::Inherited => object! { type : "Inherited" },
         }
     }
 }
@@ -1209,491 +1209,491 @@ impl ToJS for syn::WherePredicate {
 }
 impl ToJS for syn::token::Abstract {
     fn to_js(self) -> JsValue {
-        "Abstract".to_js()
+        object! { type : "Abstract" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Add {
     fn to_js(self) -> JsValue {
-        "Add".to_js()
+        object! { type : "Add" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::AddEq {
     fn to_js(self) -> JsValue {
-        "AddEq".to_js()
+        object! { type : "AddEq" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::And {
     fn to_js(self) -> JsValue {
-        "And".to_js()
+        object! { type : "And" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::AndAnd {
     fn to_js(self) -> JsValue {
-        "AndAnd".to_js()
+        object! { type : "AndAnd" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::AndEq {
     fn to_js(self) -> JsValue {
-        "AndEq".to_js()
+        object! { type : "AndEq" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::As {
     fn to_js(self) -> JsValue {
-        "As".to_js()
+        object! { type : "As" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Async {
     fn to_js(self) -> JsValue {
-        "Async".to_js()
+        object! { type : "Async" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::At {
     fn to_js(self) -> JsValue {
-        "At".to_js()
+        object! { type : "At" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Auto {
     fn to_js(self) -> JsValue {
-        "Auto".to_js()
+        object! { type : "Auto" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Bang {
     fn to_js(self) -> JsValue {
-        "Bang".to_js()
+        object! { type : "Bang" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Become {
     fn to_js(self) -> JsValue {
-        "Become".to_js()
+        object! { type : "Become" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Box {
     fn to_js(self) -> JsValue {
-        "Box".to_js()
+        object! { type : "Box" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Break {
     fn to_js(self) -> JsValue {
-        "Break".to_js()
+        object! { type : "Break" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Caret {
     fn to_js(self) -> JsValue {
-        "Caret".to_js()
+        object! { type : "Caret" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::CaretEq {
     fn to_js(self) -> JsValue {
-        "CaretEq".to_js()
+        object! { type : "CaretEq" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Colon {
     fn to_js(self) -> JsValue {
-        "Colon".to_js()
+        object! { type : "Colon" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Colon2 {
     fn to_js(self) -> JsValue {
-        "Colon2".to_js()
+        object! { type : "Colon2" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Comma {
     fn to_js(self) -> JsValue {
-        "Comma".to_js()
+        object! { type : "Comma" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Const {
     fn to_js(self) -> JsValue {
-        "Const".to_js()
+        object! { type : "Const" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Continue {
     fn to_js(self) -> JsValue {
-        "Continue".to_js()
+        object! { type : "Continue" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Crate {
     fn to_js(self) -> JsValue {
-        "Crate".to_js()
+        object! { type : "Crate" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Default {
     fn to_js(self) -> JsValue {
-        "Default".to_js()
+        object! { type : "Default" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Div {
     fn to_js(self) -> JsValue {
-        "Div".to_js()
+        object! { type : "Div" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::DivEq {
     fn to_js(self) -> JsValue {
-        "DivEq".to_js()
+        object! { type : "DivEq" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Do {
     fn to_js(self) -> JsValue {
-        "Do".to_js()
+        object! { type : "Do" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Dot {
     fn to_js(self) -> JsValue {
-        "Dot".to_js()
+        object! { type : "Dot" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Dot2 {
     fn to_js(self) -> JsValue {
-        "Dot2".to_js()
+        object! { type : "Dot2" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Dot3 {
     fn to_js(self) -> JsValue {
-        "Dot3".to_js()
+        object! { type : "Dot3" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::DotDotEq {
     fn to_js(self) -> JsValue {
-        "DotDotEq".to_js()
+        object! { type : "DotDotEq" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Dyn {
     fn to_js(self) -> JsValue {
-        "Dyn".to_js()
+        object! { type : "Dyn" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Else {
     fn to_js(self) -> JsValue {
-        "Else".to_js()
+        object! { type : "Else" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Enum {
     fn to_js(self) -> JsValue {
-        "Enum".to_js()
+        object! { type : "Enum" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Eq {
     fn to_js(self) -> JsValue {
-        "Eq".to_js()
+        object! { type : "Eq" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::EqEq {
     fn to_js(self) -> JsValue {
-        "EqEq".to_js()
+        object! { type : "EqEq" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Existential {
     fn to_js(self) -> JsValue {
-        "Existential".to_js()
+        object! { type : "Existential" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Extern {
     fn to_js(self) -> JsValue {
-        "Extern".to_js()
+        object! { type : "Extern" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::FatArrow {
     fn to_js(self) -> JsValue {
-        "FatArrow".to_js()
+        object! { type : "FatArrow" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Final {
     fn to_js(self) -> JsValue {
-        "Final".to_js()
+        object! { type : "Final" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Fn {
     fn to_js(self) -> JsValue {
-        "Fn".to_js()
+        object! { type : "Fn" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::For {
     fn to_js(self) -> JsValue {
-        "For".to_js()
+        object! { type : "For" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Ge {
     fn to_js(self) -> JsValue {
-        "Ge".to_js()
+        object! { type : "Ge" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Gt {
     fn to_js(self) -> JsValue {
-        "Gt".to_js()
+        object! { type : "Gt" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::If {
     fn to_js(self) -> JsValue {
-        "If".to_js()
+        object! { type : "If" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Impl {
     fn to_js(self) -> JsValue {
-        "Impl".to_js()
+        object! { type : "Impl" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::In {
     fn to_js(self) -> JsValue {
-        "In".to_js()
+        object! { type : "In" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::LArrow {
     fn to_js(self) -> JsValue {
-        "LArrow".to_js()
+        object! { type : "LArrow" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Le {
     fn to_js(self) -> JsValue {
-        "Le".to_js()
+        object! { type : "Le" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Let {
     fn to_js(self) -> JsValue {
-        "Let".to_js()
+        object! { type : "Let" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Loop {
     fn to_js(self) -> JsValue {
-        "Loop".to_js()
+        object! { type : "Loop" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Lt {
     fn to_js(self) -> JsValue {
-        "Lt".to_js()
+        object! { type : "Lt" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Macro {
     fn to_js(self) -> JsValue {
-        "Macro".to_js()
+        object! { type : "Macro" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Match {
     fn to_js(self) -> JsValue {
-        "Match".to_js()
+        object! { type : "Match" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Mod {
     fn to_js(self) -> JsValue {
-        "Mod".to_js()
+        object! { type : "Mod" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Move {
     fn to_js(self) -> JsValue {
-        "Move".to_js()
+        object! { type : "Move" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::MulEq {
     fn to_js(self) -> JsValue {
-        "MulEq".to_js()
+        object! { type : "MulEq" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Mut {
     fn to_js(self) -> JsValue {
-        "Mut".to_js()
+        object! { type : "Mut" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Ne {
     fn to_js(self) -> JsValue {
-        "Ne".to_js()
+        object! { type : "Ne" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Or {
     fn to_js(self) -> JsValue {
-        "Or".to_js()
+        object! { type : "Or" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::OrEq {
     fn to_js(self) -> JsValue {
-        "OrEq".to_js()
+        object! { type : "OrEq" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::OrOr {
     fn to_js(self) -> JsValue {
-        "OrOr".to_js()
+        object! { type : "OrOr" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Override {
     fn to_js(self) -> JsValue {
-        "Override".to_js()
+        object! { type : "Override" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Pound {
     fn to_js(self) -> JsValue {
-        "Pound".to_js()
+        object! { type : "Pound" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Priv {
     fn to_js(self) -> JsValue {
-        "Priv".to_js()
+        object! { type : "Priv" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Pub {
     fn to_js(self) -> JsValue {
-        "Pub".to_js()
+        object! { type : "Pub" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Question {
     fn to_js(self) -> JsValue {
-        "Question".to_js()
+        object! { type : "Question" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::RArrow {
     fn to_js(self) -> JsValue {
-        "RArrow".to_js()
+        object! { type : "RArrow" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Ref {
     fn to_js(self) -> JsValue {
-        "Ref".to_js()
+        object! { type : "Ref" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Rem {
     fn to_js(self) -> JsValue {
-        "Rem".to_js()
+        object! { type : "Rem" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::RemEq {
     fn to_js(self) -> JsValue {
-        "RemEq".to_js()
+        object! { type : "RemEq" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Return {
     fn to_js(self) -> JsValue {
-        "Return".to_js()
+        object! { type : "Return" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::SelfType {
     fn to_js(self) -> JsValue {
-        "SelfType".to_js()
+        object! { type : "SelfType" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::SelfValue {
     fn to_js(self) -> JsValue {
-        "SelfValue".to_js()
+        object! { type : "SelfValue" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Semi {
     fn to_js(self) -> JsValue {
-        "Semi".to_js()
+        object! { type : "Semi" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Shl {
     fn to_js(self) -> JsValue {
-        "Shl".to_js()
+        object! { type : "Shl" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::ShlEq {
     fn to_js(self) -> JsValue {
-        "ShlEq".to_js()
+        object! { type : "ShlEq" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Shr {
     fn to_js(self) -> JsValue {
-        "Shr".to_js()
+        object! { type : "Shr" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::ShrEq {
     fn to_js(self) -> JsValue {
-        "ShrEq".to_js()
+        object! { type : "ShrEq" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Star {
     fn to_js(self) -> JsValue {
-        "Star".to_js()
+        object! { type : "Star" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Static {
     fn to_js(self) -> JsValue {
-        "Static".to_js()
+        object! { type : "Static" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Struct {
     fn to_js(self) -> JsValue {
-        "Struct".to_js()
+        object! { type : "Struct" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Sub {
     fn to_js(self) -> JsValue {
-        "Sub".to_js()
+        object! { type : "Sub" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::SubEq {
     fn to_js(self) -> JsValue {
-        "SubEq".to_js()
+        object! { type : "SubEq" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Super {
     fn to_js(self) -> JsValue {
-        "Super".to_js()
+        object! { type : "Super" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Tilde {
     fn to_js(self) -> JsValue {
-        "Tilde".to_js()
+        object! { type : "Tilde" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Trait {
     fn to_js(self) -> JsValue {
-        "Trait".to_js()
+        object! { type : "Trait" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Try {
     fn to_js(self) -> JsValue {
-        "Try".to_js()
+        object! { type : "Try" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Type {
     fn to_js(self) -> JsValue {
-        "Type".to_js()
+        object! { type : "Type" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Typeof {
     fn to_js(self) -> JsValue {
-        "Typeof".to_js()
+        object! { type : "Typeof" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Underscore {
     fn to_js(self) -> JsValue {
-        "Underscore".to_js()
+        object! { type : "Underscore" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Union {
     fn to_js(self) -> JsValue {
-        "Union".to_js()
+        object! { type : "Union" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Unsafe {
     fn to_js(self) -> JsValue {
-        "Unsafe".to_js()
+        object! { type : "Unsafe" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Unsized {
     fn to_js(self) -> JsValue {
-        "Unsized".to_js()
+        object! { type : "Unsized" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Use {
     fn to_js(self) -> JsValue {
-        "Use".to_js()
+        object! { type : "Use" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Virtual {
     fn to_js(self) -> JsValue {
-        "Virtual".to_js()
+        object! { type : "Virtual" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Where {
     fn to_js(self) -> JsValue {
-        "Where".to_js()
+        object! { type : "Where" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::While {
     fn to_js(self) -> JsValue {
-        "While".to_js()
+        object! { type : "While" , span : self . span ( ) }
     }
 }
 impl ToJS for syn::token::Yield {
     fn to_js(self) -> JsValue {
-        "Yield".to_js()
+        object! { type : "Yield" , span : self . span ( ) }
     }
 }

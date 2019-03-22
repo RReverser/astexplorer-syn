@@ -32,7 +32,10 @@ mod types {
                 tokens.append_all(quote! {
                     impl ToJS for syn::token::#key {
                         fn to_js(self) -> JsValue {
-                            #key_as_str.to_js()
+                            object! {
+                                type: #key_as_str,
+                                span: self.span()
+                            }
                         }
                     }
                 });
@@ -89,7 +92,9 @@ mod types {
 
                         match types.len() {
                             0 => quote! {
-                               #variant => #variant_as_str.to_js()
+                               #variant => object! {
+                                   type: #variant_as_str
+                               }
                             },
                             1 => quote! {
                                #variant(x) => x.to_js()

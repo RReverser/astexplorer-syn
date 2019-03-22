@@ -1,4 +1,5 @@
 use wasm_bindgen::prelude::*;
+use syn::spanned::Spanned;
 
 #[wasm_bindgen]
 extern "C" {
