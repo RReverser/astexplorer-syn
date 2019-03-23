@@ -18,7 +18,6 @@ mod types {
 
     #[derive(Debug, PartialEq, Deserialize)]
     pub struct Definitions {
-        /// The Syn version used to generate the introspection file.
         pub types: Vec<Node>,
         pub tokens: IndexMap<Ident, String>,
     }
