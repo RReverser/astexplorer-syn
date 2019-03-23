@@ -202,8 +202,8 @@ impl ToJS for syn::token::Bracket {
 include!("../out.rs");
 
 #[wasm_bindgen]
-pub fn parse(rust: &str) -> Result<JsValue, JsValue> {
-    match syn::parse_str::<syn::File>(rust) {
+pub fn parse_file(rust: &str) -> Result<JsValue, JsValue> {
+    match syn::parse_file(rust) {
         Ok(ast) => Ok(ast.to_js()),
         Err(err) => Err(Error::new(&err.to_string()).into()),
     }
