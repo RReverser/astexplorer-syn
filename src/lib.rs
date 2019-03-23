@@ -23,6 +23,12 @@ extern "C" {
     fn push(this: &Array, value: JsValue);
 }
 
+fn new_object_with_type(ty: &'static str) -> Object {
+    let obj = Object::new();
+    obj.set("type", ty.to_js());
+    obj.into()
+}
+
 macro_rules! js {
     ([$($value:expr),* $(,)?]) => {{
         let arr = Array::new();
@@ -31,8 +37,7 @@ macro_rules! js {
     }};
 
     ($ty:ident { $($name:ident: $value:expr),* $(,)? }) => {{
-        let obj = Object::new();
-        obj.set("type", stringify!($ty).to_js());
+        let obj = new_object_with_type(stringify!($ty));
         $(obj.set(stringify!($name), $value.to_js());)*
         JsValue::from(obj)
     }};
