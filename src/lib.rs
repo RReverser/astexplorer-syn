@@ -17,25 +17,16 @@ extern "C" {
     type Array;
 
     #[wasm_bindgen(constructor)]
-    fn new(len: u32) -> Array;
+    fn new() -> Array;
 
-    #[wasm_bindgen(method, indexing_setter)]
-    fn set(this: &Array, key: u32, value: JsValue);
+    #[wasm_bindgen(method)]
+    fn push(this: &Array, value: JsValue);
 }
 
 macro_rules! js {
-    (@count $first:expr, $($value:expr,)*) => (1u32 + js!(@count $($value,)*));
-
-    (@count) => (0u32);
-
     ([$($value:expr),* $(,)?]) => {{
-        let arr = Array::new(js!(@count $($value,)*));
-        let mut i = 0_u32;
-        $(
-            arr.set(i, $value.to_js());
-            i += 1_u32;
-        )*
-        let _ = i;
+        let arr = Array::new();
+        $(arr.push($value.to_js());)*
         JsValue::from(arr)
     }};
 
@@ -82,9 +73,9 @@ impl<T: ToJS> ToJS for Box<T> {
 
 impl<T: ToJS> ToJS for [T] {
     fn to_js(&self) -> JsValue {
-        let arr = Array::new(self.len() as _);
-        for (i, item) in self.iter().enumerate() {
-            arr.set(i as _, item.to_js());
+        let arr = Array::new();
+        for item in self {
+            arr.push(item.to_js());
         }
         arr.into()
     }
@@ -171,9 +162,9 @@ impl ToJS for proc_macro2::Span {
 
 impl<T: ToJS, P> ToJS for syn::punctuated::Punctuated<T, P> {
     fn to_js(&self) -> JsValue {
-        let arr = Array::new(self.len() as _);
-        for (i, item) in self.iter().enumerate() {
-            arr.set(i as _, item.to_js());
+        let arr = Array::new();
+        for item in self {
+            arr.push(item.to_js());
         }
         arr.into()
     }
