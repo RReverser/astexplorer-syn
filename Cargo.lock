@@ -1,6 +1,6 @@
 [[package]]
 name = "astexplorer-syn"
-version = "0.1.0"
+version = "0.15.29"
 dependencies = [
  "indexmap 1.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "proc-macro2 0.4.27 (registry+https://github.com/rust-lang/crates.io-index)",
