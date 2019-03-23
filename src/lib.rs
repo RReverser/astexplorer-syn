@@ -208,3 +208,11 @@ pub fn parse_file(rust: &str) -> Result<JsValue, JsValue> {
         Err(err) => Err(Error::new(&err.to_string()).into()),
     }
 }
+
+#[wasm_bindgen]
+pub fn parse_derive_input(rust: &str) -> Result<JsValue, JsValue> {
+    match syn::parse_str::<syn::DeriveInput>(rust) {
+        Ok(ast) => Ok(ast.to_js()),
+        Err(err) => Err(Error::new(&err.to_string()).into()),
+    }
+}
