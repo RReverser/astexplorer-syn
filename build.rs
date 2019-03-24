@@ -1,5 +1,8 @@
 use quote::ToTokens;
+use std::env;
+use std::fs::File;
 use std::io::Write;
+use std::path::Path;
 
 mod types {
     use indexmap::IndexMap;
@@ -177,8 +180,14 @@ mod types {
 fn main() {
     let body: types::Definitions = serde_json::from_str(include_str!("syn/syn.json")).unwrap();
 
-    let mut out = std::fs::File::create("out.rs").unwrap();
-    writeln!(out, "{}", body.into_token_stream()).unwrap();
+    let generated = body.into_token_stream();
 
-    let _ = std::process::Command::new("rustfmt").arg("out.rs").status();
+    let path = &Path::new(&env::var_os("OUT_DIR").unwrap()).join("to_js.rs");
+
+    {
+        let mut out = File::create(path).unwrap();
+        writeln!(out, "{}", generated).unwrap();
+    }
+
+    let _ = std::process::Command::new("rustfmt").arg(path).status();
 }

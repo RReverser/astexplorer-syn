@@ -1,5 +1,5 @@
-use wasm_bindgen::prelude::*;
 use syn::spanned::Spanned;
+use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 extern "C" {
@@ -44,7 +44,7 @@ macro_rules! js {
 }
 
 #[wasm_bindgen]
-extern {
+extern "C" {
     type Error;
 
     #[wasm_bindgen(constructor)]
@@ -199,7 +199,7 @@ impl ToJS for syn::token::Bracket {
     }
 }
 
-include!("../out.rs");
+include!(concat!(env!("OUT_DIR"), "/to_js.rs"));
 
 #[wasm_bindgen(js_name = "parseFile")]
 pub fn parse_file(rust: &str) -> Result<JsValue, JsValue> {
