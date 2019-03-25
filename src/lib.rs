@@ -45,10 +45,13 @@ macro_rules! js {
 
 #[wasm_bindgen]
 extern "C" {
-    type Error;
+    type SyntaxError;
 
     #[wasm_bindgen(constructor)]
-    fn new(msg: &str) -> Error;
+    fn new(msg: &str) -> SyntaxError;
+
+    #[wasm_bindgen(method, setter = lineNumber)]
+    pub fn set_line_number(this: &SyntaxError, line: u32);
 }
 
 trait ToJS {
@@ -201,11 +204,19 @@ impl ToJS for syn::token::Bracket {
 
 include!(concat!(env!("OUT_DIR"), "/to_js.rs"));
 
+impl ToJS for syn::Error {
+    fn to_js(&self) -> JsValue {
+        let err = SyntaxError::new(&self.to_string());
+        err.set_line_number(self.span().start().line as u32);
+        err.into()
+    }
+}
+
 #[wasm_bindgen(js_name = "parseFile")]
 pub fn parse_file(rust: &str) -> Result<JsValue, JsValue> {
     match syn::parse_file(rust) {
         Ok(ast) => Ok(ast.to_js()),
-        Err(err) => Err(Error::new(&err.to_string()).into()),
+        Err(err) => Err(err.to_js()),
     }
 }
 
@@ -213,6 +224,6 @@ pub fn parse_file(rust: &str) -> Result<JsValue, JsValue> {
 pub fn parse_derive_input(rust: &str) -> Result<JsValue, JsValue> {
     match syn::parse_str::<syn::DeriveInput>(rust) {
         Ok(ast) => Ok(ast.to_js()),
-        Err(err) => Err(Error::new(&err.to_string()).into()),
+        Err(err) => Err(err.to_js()),
     }
 }

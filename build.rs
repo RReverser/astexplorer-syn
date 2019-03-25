@@ -10,6 +10,16 @@ mod types {
     use quote::{quote, ToTokens, TokenStreamExt};
     use serde::{Deserialize, Deserializer};
 
+    // Manual blacklist for now. See https://github.com/dtolnay/syn/issues/607#issuecomment-475905135.
+    fn has_spanned(ty: &str) -> bool {
+        match ty {
+            "DataStruct" | "DataEnum" | "DataUnion" => false,
+            "FnDecl" => false,
+            "QSelf" => false,
+            _ => true,
+        }
+    }
+
     #[derive(Debug, PartialEq, Eq, Hash, Deserialize)]
     pub struct Ident(String);
 
@@ -67,10 +77,15 @@ mod types {
                             Type::Ext(_) => false,
                             _ => true,
                         })
-                        .map(|(field, _ty)| {
-                            quote! {
-                                #field: self.#field
-                            }
+                        .map(|(field, _ty)| quote! {
+                            #field: self.#field
+                        })
+                        .chain(if has_spanned(&ident.0) {
+                            Some(quote! {
+                                span: self.span()
+                            })
+                        } else {
+                            None
                         });
 
                     quote! {
