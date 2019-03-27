@@ -36,8 +36,8 @@ macro_rules! js {
         JsValue::from(arr)
     }};
 
-    ($ty:ident { $($name:ident: $value:expr),* $(,)? }) => {{
-        let obj = new_object_with_type(stringify!($ty));
+    ($ty:ident $(:: $variant:ident)? { $($name:ident: $value:expr),* $(,)? }) => {{
+        let obj = new_object_with_type(concat!(stringify!($ty) $(, "::", stringify!($variant))?));
         $(obj.set(stringify!($name), $value.to_js());)*
         JsValue::from(obj)
     }};

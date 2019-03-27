@@ -106,8 +106,12 @@ mod types {
                 }
                 Data::Enum(variants) => {
                     let matches = variants.iter().map(|(variant, types)| {
+                        let variant = quote! {
+                            #ident::#variant
+                        };
+
                         let variant_path = quote! {
-                            syn::#ident::#variant
+                            syn::#variant
                         };
 
                         match types.len() {
