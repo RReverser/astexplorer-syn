@@ -70,13 +70,23 @@ mod types {
                     }
                 }
                 Data::Struct(fields) => {
-                    let fields = fields
+                    let mut fields = fields
                         .iter()
                         .filter(|(_field, ty)| match ty {
                             // Skip externals for now.
                             Type::Ext(_) => false,
                             _ => true,
                         })
+                        .collect::<Vec<_>>();
+
+                    // Move groups down or they will be the target of any locations.
+                    fields.sort_by_key(|(_field, ty)| match ty {
+                        Type::Group(_) => 1,
+                        _ => 0,
+                    });
+
+                    let fields = fields
+                        .into_iter()
                         .map(|(field, _ty)| quote! {
                             #field: self.#field
                         })
