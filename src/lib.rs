@@ -10,10 +10,14 @@ extern "C" {
 
     #[wasm_bindgen(method, indexing_setter)]
     fn set(this: &Object, key: &str, value: JsValue);
+
+    #[wasm_bindgen(method, indexing_setter)]
+    fn set_i(this: &Object, key: u32, value: JsValue);
 }
 
 #[wasm_bindgen]
 extern "C" {
+    #[wasm_bindgen(extends = Object)]
     type Array;
 
     #[wasm_bindgen(constructor)]
@@ -36,9 +40,17 @@ macro_rules! js {
         JsValue::from(arr)
     }};
 
-    ($ty:ident $(:: $variant:ident)? { $($name:ident: $value:expr),* $(,)? }) => {{
+    ($ty:ident $(:: $variant:ident)? { $($name:ident: $value:expr),* $(,)? } $([$($item:expr),* $(,)?])?) => {{
         let obj = new_object_with_type(concat!(stringify!($ty) $(, "::", stringify!($variant))?));
         $(obj.set(stringify!($name), $value.to_js());)*
+        $(
+            let mut i = 0;
+            $(
+                obj.set_i(i, $item.to_js());
+                i += 1;
+            )*
+            obj.set("length", i.to_js());
+        )?
         JsValue::from(obj)
     }};
 }
@@ -113,16 +125,41 @@ impl ToJS for u32 {
     }
 }
 
-impl ToJS for usize {
+impl ToJS for f64 {
+    fn to_js(&self) -> JsValue {
+        JsValue::from(*self)
+    }
+}
+
+impl ToJS for u64 {
     fn to_js(&self) -> JsValue {
         // Potentially lossy if over 2^53.
-        JsValue::from(*self as f64)
+        (*self as f64).to_js()
+    }
+}
+
+impl ToJS for usize {
+    fn to_js(&self) -> JsValue {
+        (*self as f64).to_js()
     }
 }
 
 impl ToJS for str {
     fn to_js(&self) -> JsValue {
         JsValue::from_str(self)
+    }
+}
+
+impl ToJS for u8 {
+    fn to_js(&self) -> JsValue {
+        (*self as f64).to_js()
+    }
+}
+
+impl ToJS for char {
+    fn to_js(&self) -> JsValue {
+        let mut buf = [0; 4];
+        self.encode_utf8(&mut buf).to_js()
     }
 }
 
@@ -144,12 +181,6 @@ impl<A: ToJS, B: ToJS, C: ToJS> ToJS for (A, B, C) {
     }
 }
 
-impl ToJS for proc_macro2::Ident {
-    fn to_js(&self) -> JsValue {
-        self.to_string().to_js()
-    }
-}
-
 impl ToJS for proc_macro2::LineColumn {
     fn to_js(&self) -> JsValue {
         js!(LineColumn {
@@ -164,6 +195,33 @@ impl ToJS for proc_macro2::Span {
         js!(Span {
             start: self.start(),
             end: self.end(),
+        })
+    }
+}
+
+impl ToJS for proc_macro2::Ident {
+    fn to_js(&self) -> JsValue {
+        js!(Ident {
+            to_string: self.to_string(),
+            span: self.span(),
+        })
+    }
+}
+
+impl ToJS for proc_macro2::TokenStream {
+    fn to_js(&self) -> JsValue {
+        js!(TokenStream {
+            to_string: self.to_string(),
+            span: self.span(),
+        })
+    }
+}
+
+impl ToJS for proc_macro2::Literal {
+    fn to_js(&self) -> JsValue {
+        js!(Literal {
+            to_string: self.to_string(),
+            span: self.span(),
         })
     }
 }

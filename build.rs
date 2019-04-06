@@ -66,17 +66,15 @@ mod types {
             let data = match &self.data {
                 Data::Private => {
                     quote! {
-                        js!(#ident {})
+                        js!(#ident {
+                            value: self.value(),
+                            span: self.span()
+                        })
                     }
                 }
                 Data::Struct(fields) => {
                     let mut fields = fields
                         .iter()
-                        .filter(|(_field, ty)| match ty {
-                            // Skip externals for now.
-                            Type::Ext(_) => false,
-                            _ => true,
-                        })
                         .collect::<Vec<_>>();
 
                     // Move groups down or they will be the target of any locations.
@@ -123,12 +121,10 @@ mod types {
                             },
                             _ => {
                                 let payload = (0..types.len()).map(|i| Ident(format!("x{}", i)));
-                                let payload = quote! { (#(#payload),*) };
+                                let payload = quote! { #(#payload),* };
 
                                 quote! {
-                                    #variant_path #payload => js!(#variant {
-                                        values: #payload
-                                    })
+                                    #variant_path(#payload) => js!(#variant { span: self.span() } [#payload])
                                 }
                             }
                         }
