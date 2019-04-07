@@ -29,7 +29,7 @@ extern "C" {
 
 fn new_object_with_type(ty: &'static str) -> Object {
     let obj = Object::new();
-    obj.set("type", ty.to_js());
+    obj.set("_type", ty.to_js());
     obj.into()
 }
 
