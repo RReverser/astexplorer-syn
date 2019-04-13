@@ -1,6 +1,6 @@
 [package]
 name = "astexplorer-syn"
-version = "0.15.29"
+version = "0.15.30"
 authors = ["Ingvar Stepanyan <me@rreverser.com>"]
 edition = "2018"
 
@@ -8,7 +8,7 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 [dependencies]
-syn = { version = "=0.15.29", path = "syn", default-features = false, features = ["derive", "parsing", "printing", "full"] }
+syn = { version = "=0.15.30", path = "syn", default-features = false, features = ["derive", "parsing", "printing", "full"] }
 proc-macro2 = { version = "0.4.27", features = ["span-locations"] }
 wasm-bindgen = "0.2.39"
 

@@ -1,13 +1,13 @@
 [[package]]
 name = "astexplorer-syn"
-version = "0.15.29"
+version = "0.15.30"
 dependencies = [
  "indexmap 1.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "proc-macro2 0.4.27 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 0.6.11 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.89 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_json 1.0.39 (registry+https://github.com/rust-lang/crates.io-index)",
- "syn 0.15.29",
+ "syn 0.15.30",
  "wasm-bindgen 0.2.39 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -99,6 +99,7 @@ dependencies = [
 [[package]]
 name = "syn"
 version = "0.15.29"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "proc-macro2 0.4.27 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 0.6.11 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -107,8 +108,7 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "0.15.29"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.15.30"
 dependencies = [
  "proc-macro2 0.4.27 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 0.6.11 (registry+https://github.com/rust-lang/crates.io-index)",
