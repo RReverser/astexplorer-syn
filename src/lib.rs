@@ -208,10 +208,41 @@ impl ToJS for proc_macro2::Ident {
     }
 }
 
-impl ToJS for proc_macro2::TokenStream {
+impl ToJS for proc_macro2::Delimiter {
     fn to_js(&self) -> JsValue {
-        js!(TokenStream {
-            to_string: self.to_string(),
+        match self {
+            proc_macro2::Delimiter::Parenthesis => js!(Delimiter::Parenthesis {}),
+            proc_macro2::Delimiter::Brace => js!(Delimiter::Brace {}),
+            proc_macro2::Delimiter::Bracket => js!(Delimiter::Bracket {}),
+            proc_macro2::Delimiter::None => js!(Delimiter::None {}),
+        }
+    }
+}
+
+impl ToJS for proc_macro2::Group {
+    fn to_js(&self) -> JsValue {
+        js!(Group {
+            delimiter: self.delimiter(),
+            stream: self.stream(),
+            span: self.span(),
+        })
+    }
+}
+
+impl ToJS for proc_macro2::Spacing {
+    fn to_js(&self) -> JsValue {
+        match self {
+            proc_macro2::Spacing::Alone => js!(Spacing::Alone {}),
+            proc_macro2::Spacing::Joint => js!(Spacing::Joint {}),
+        }
+    }
+}
+
+impl ToJS for proc_macro2::Punct {
+    fn to_js(&self) -> JsValue {
+        js!(Punct {
+            as_char: self.as_char(),
+            spacing: self.spacing(),
             span: self.span(),
         })
     }
@@ -226,13 +257,44 @@ impl ToJS for proc_macro2::Literal {
     }
 }
 
-impl<T: ToJS, P> ToJS for syn::punctuated::Punctuated<T, P> {
+impl ToJS for proc_macro2::TokenTree {
     fn to_js(&self) -> JsValue {
-        let arr = Array::new();
-        for item in self {
-            arr.push(item.to_js());
+        match self {
+            proc_macro2::TokenTree::Group(group) => group.to_js(),
+            proc_macro2::TokenTree::Ident(ident) => ident.to_js(),
+            proc_macro2::TokenTree::Punct(punct) => punct.to_js(),
+            proc_macro2::TokenTree::Literal(lit) => lit.to_js(),
         }
-        arr.into()
+    }
+}
+
+impl ToJS for proc_macro2::TokenStream {
+    fn to_js(&self) -> JsValue {
+        let obj = new_object_with_type("TokenStream");
+        let mut i = 0;
+        for item in self.clone() {
+            obj.set_i(i, item.to_js());
+            i += 1;
+        }
+        obj.set("length", i.to_js());
+        JsValue::from(obj)
+    }
+}
+
+impl<T: ToJS, P: ToJS> ToJS for syn::punctuated::Punctuated<T, P> {
+    fn to_js(&self) -> JsValue {
+        let obj = new_object_with_type("Punctuated");
+        let mut i = 0;
+        for item in self.pairs() {
+            obj.set_i(i, item.value().to_js());
+            i += 1;
+            if let Some(punct) = item.punct() {
+                obj.set_i(i, punct.to_js());
+                i += 1;
+            }
+        }
+        obj.set("length", i.to_js());
+        JsValue::from(obj)
     }
 }
 

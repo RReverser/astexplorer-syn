@@ -80,6 +80,7 @@ mod types {
                     // Move groups down or they will be the target of any locations.
                     fields.sort_by_key(|(_field, ty)| match ty {
                         Type::Group(_) => 1,
+                        Type::Syn(ident) if ident.0 == "MacroDelimiter" => 1,
                         _ => 0,
                     });
 
