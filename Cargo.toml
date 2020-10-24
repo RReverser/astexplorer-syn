@@ -8,16 +8,16 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 [dependencies]
-syn = { version = "=0.15.30", path = "syn", default-features = false, features = ["derive", "parsing", "printing", "full"] }
 proc-macro2 = { version = "0.4.27", features = ["span-locations"] }
+syn = { version = "=0.15.30", path = "syn", default-features = false, features = ["derive", "parsing", "printing", "full"] }
 wasm-bindgen = "0.2.39"
 
 [build-dependencies]
-serde = { version = "1.0.89", features = ["derive"] }
 indexmap = { version = "1.0.2", features = ["serde-1"] }
-serde_json = "1.0.39"
-quote = "0.6.11"
 proc-macro2 = "0.4.27"
+quote = "0.6.11"
+serde = { version = "1.0.89", features = ["derive"] }
+serde_json = "1.0.39"
 
 [profile.release]
 opt-level = "z"
