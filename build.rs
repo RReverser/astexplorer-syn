@@ -38,12 +38,8 @@ fn node_tokens(node: &Node, tokens: &mut TokenStream) {
     let ident = format_ident!("{}", node.ident);
 
     let data = match &node.data {
-        Data::Private => {
-            if ident == "LitStr"
-                || ident == "LitByteStr"
-                || ident == "LitByte"
-                || ident == "LitChar"
-            {
+        Data::Private => match node.ident.as_str() {
+            "LitStr" | "LitByteStr" | "LitByte" | "LitChar" => {
                 quote! {
                     js!(#ident {
                         value: self.value(),
@@ -51,7 +47,8 @@ fn node_tokens(node: &Node, tokens: &mut TokenStream) {
                         span: self.span()
                     })
                 }
-            } else if ident == "LitInt" || ident == "LitFloat" {
+            }
+            "LitInt" | "LitFloat" => {
                 quote! {
                     js!(#ident {
                         digits: self.base10_digits(),
@@ -59,10 +56,9 @@ fn node_tokens(node: &Node, tokens: &mut TokenStream) {
                         span: self.span()
                     })
                 }
-            } else {
-                unreachable!()
             }
-        }
+            _ => unreachable!(),
+        },
         Data::Struct(fields) => {
             let mut fields = fields.iter().collect::<Vec<_>>();
 
