@@ -6,7 +6,8 @@ version = "0.15.30"
 dependencies = [
  "indexmap",
  "proc-macro2 0.4.30",
- "quote 0.6.13",
+ "proc-macro2 1.0.24",
+ "quote 1.0.7",
  "serde",
  "serde_json",
  "syn 0.15.30",
