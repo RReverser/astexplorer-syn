@@ -73,9 +73,7 @@ mod types {
                     }
                 }
                 Data::Struct(fields) => {
-                    let mut fields = fields
-                        .iter()
-                        .collect::<Vec<_>>();
+                    let mut fields = fields.iter().collect::<Vec<_>>();
 
                     // Move groups down or they will be the target of any locations.
                     fields.sort_by_key(|(_field, ty)| match ty {
@@ -86,8 +84,10 @@ mod types {
 
                     let fields = fields
                         .into_iter()
-                        .map(|(field, _ty)| quote! {
-                            #field: self.#field
+                        .map(|(field, _ty)| {
+                            quote! {
+                                #field: self.#field
+                            }
                         })
                         .chain(if has_spanned(&ident.0) {
                             Some(quote! {
