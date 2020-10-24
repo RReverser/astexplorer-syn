@@ -39,11 +39,28 @@ fn node_tokens(node: &Node, tokens: &mut TokenStream) {
 
     let data = match &node.data {
         Data::Private => {
-            quote! {
-                js!(#ident {
-                    value: self.value(),
-                    span: self.span()
-                })
+            if ident == "LitStr"
+                || ident == "LitByteStr"
+                || ident == "LitByte"
+                || ident == "LitChar"
+            {
+                quote! {
+                    js!(#ident {
+                        value: self.value(),
+                        suffix: self.suffix(),
+                        span: self.span()
+                    })
+                }
+            } else if ident == "LitInt" || ident == "LitFloat" {
+                quote! {
+                    js!(#ident {
+                        digits: self.base10_digits(),
+                        suffix: self.suffix(),
+                        span: self.span()
+                    })
+                }
+            } else {
+                unreachable!()
             }
         }
         Data::Struct(fields) => {
@@ -58,10 +75,13 @@ fn node_tokens(node: &Node, tokens: &mut TokenStream) {
 
             let fields = fields
                 .into_iter()
-                .map(|(field, _ty)| {
-                    let field = format_ident!("{}", field);
-                    quote! {
-                        #field: self.#field
+                .filter_map(|(field, ty)| match ty {
+                    Type::Syn(ty) if ty == "Reserved" => None,
+                    _ => {
+                        let field = format_ident!("{}", field);
+                        Some(quote! {
+                            #field: self.#field
+                        })
                     }
                 })
                 .chain(if has_spanned(&node.ident) {
@@ -106,9 +126,15 @@ fn node_tokens(node: &Node, tokens: &mut TokenStream) {
                     }
                 }
             });
+            let wildcard = if node.exhaustive {
+                None
+            } else {
+                Some(quote!(_ => JsValue::UNDEFINED))
+            };
             quote! {
                 match self {
                     #(#matches,)*
+                    #wildcard
                 }
             }
         }
