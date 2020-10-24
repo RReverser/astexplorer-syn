@@ -6,7 +6,7 @@ use std::io::Write;
 use std::path::Path;
 use syn_codegen::{Data, Definitions, Node, Type};
 
-// Manual blacklist for now. See https://github.com/dtolnay/syn/issues/607#issuecomment-475905135.
+// Manual blacklist; see https://github.com/dtolnay/syn/issues/607#issuecomment-475905135.
 fn has_spanned(ty: &str) -> bool {
     match ty {
         "DataStruct" | "DataEnum" | "DataUnion" => false,
