@@ -2,12 +2,12 @@
 # It is not intended for manual editing.
 [[package]]
 name = "astexplorer-syn"
-version = "1.0.48"
+version = "1.0.57"
 dependencies = [
  "proc-macro2",
  "quote",
  "serde_json",
- "syn 1.0.48",
+ "syn 1.0.57",
  "syn-codegen",
  "wasm-bindgen",
 ]
@@ -137,7 +137,7 @@ checksum = "cbd1ae72adb44aab48f325a02444a5fc079349a8d804c1fc922aed3f7454c74e"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 1.0.48 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 1.0.48",
 ]
 
 [[package]]
@@ -154,6 +154,8 @@ dependencies = [
 [[package]]
 name = "syn"
 version = "1.0.48"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cc371affeffc477f42a221a1e4297aedcea33d47d19b61455588bd9d8f6b19ac"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -162,9 +164,7 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "1.0.48"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cc371affeffc477f42a221a1e4297aedcea33d47d19b61455588bd9d8f6b19ac"
+version = "1.0.57"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -215,7 +215,7 @@ dependencies = [
  "log",
  "proc-macro2",
  "quote",
- "syn 1.0.48 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 1.0.48",
  "wasm-bindgen-shared",
 ]
 
@@ -237,7 +237,7 @@ checksum = "f249f06ef7ee334cc3b8ff031bfc11ec99d00f34d86da7498396dc1e3b1498fe"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 1.0.48 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 1.0.48",
  "wasm-bindgen-backend",
  "wasm-bindgen-shared",
 ]
