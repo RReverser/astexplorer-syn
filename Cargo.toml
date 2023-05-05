@@ -21,8 +21,9 @@ syn-codegen = "0.3"
 [profile.release]
 opt-level = "z"
 lto = true
+codegen-units = 1
 
 [patch.crates-io]
 # We only add `syn` as a submodule because we need `syn.json` that isn't published to crates.io,
-# but since we have it now anyway, let's use it instead of downloading separate copy.
+# but since we have it now anyway, let's use it instead of downloading a separate copy.
 syn = { path = "syn" }
