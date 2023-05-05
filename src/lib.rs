@@ -9,10 +9,16 @@ extern "C" {
     fn new() -> Object;
 
     #[wasm_bindgen(method, indexing_setter)]
-    fn set(this: &Object, key: &str, value: JsValue);
+    fn set_impl(this: &Object, key: &str, value: JsValue);
 
     #[wasm_bindgen(method, indexing_setter)]
     fn set_i(this: &Object, key: u32, value: JsValue);
+}
+
+impl Object {
+    fn set(&self, key: &str, value: JsValue) {
+        self.set_impl(wasm_bindgen::intern(key), value);
+    }
 }
 
 #[wasm_bindgen]
@@ -29,7 +35,7 @@ extern "C" {
 
 fn new_object_with_type(ty: &'static str) -> Object {
     let obj = Object::new();
-    obj.set("_type", ty.to_js());
+    obj.set("_type", wasm_bindgen::intern(ty).to_js());
     obj
 }
 
