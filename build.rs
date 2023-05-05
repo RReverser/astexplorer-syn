@@ -8,12 +8,10 @@ use syn_codegen::{Data, Definitions, Node, Type};
 
 // Manual blacklist; see https://github.com/dtolnay/syn/issues/607#issuecomment-475905135.
 fn has_spanned(ty: &str) -> bool {
-    match ty {
-        "DataStruct" | "DataEnum" | "DataUnion" => false,
-        "FnDecl" => false,
-        "QSelf" => false,
-        _ => true,
-    }
+    !matches!(
+        ty,
+        "DataStruct" | "DataEnum" | "DataUnion" | "QSelf" | "LocalInit"
+    )
 }
 
 fn definition_tokens(definitions: &Definitions, tokens: &mut TokenStream) {
@@ -62,22 +60,21 @@ fn node_tokens(node: &Node, tokens: &mut TokenStream) {
         Data::Struct(fields) => {
             let mut fields = fields.iter().collect::<Vec<_>>();
 
-            // Move groups down or they will be the target of any locations.
             fields.sort_by_key(|(_field, ty)| match ty {
-                Type::Group(_) => 1,
-                Type::Syn(ident) if ident == "MacroDelimiter" => 1,
-                _ => 0,
+                // Move groups down or they will be the target of any locations.
+                Type::Group(_) | Type::Punctuated(_) => 2,
+                // Tokens are the smallest, so make sure they're matched when searching for locations first.
+                Type::Std(_) | Type::Token(_) => 0,
+                // All the rest is somewhere in the middle.
+                _ => 1,
             });
 
             let fields = fields
                 .into_iter()
-                .filter_map(|(field, ty)| match ty {
-                    Type::Syn(ty) if ty == "Reserved" => None,
-                    _ => {
-                        let field = format_ident!("{}", field);
-                        Some(quote! {
-                            #field: self.#field
-                        })
+                .map(|(field, _ty)| {
+                    let field = format_ident!("{}", field);
+                    quote! {
+                        #field: self.#field
                     }
                 })
                 .chain(if has_spanned(&node.ident) {
@@ -112,8 +109,8 @@ fn node_tokens(node: &Node, tokens: &mut TokenStream) {
                     1 => quote! {
                         #variant_path(x) => x.to_js()
                     },
-                    _ => {
-                        let payload = (0..types.len()).map(|i| format_ident!("x{}", i));
+                    len => {
+                        let payload = (0..len).map(|i| format_ident!("x{}", i));
                         let payload = quote! { #(#payload),* };
 
                         quote! {
@@ -125,12 +122,18 @@ fn node_tokens(node: &Node, tokens: &mut TokenStream) {
             let wildcard = if node.exhaustive {
                 None
             } else {
-                Some(quote!(_ => JsValue::UNDEFINED))
+                Some(quote!(unreachable!()))
             };
-            quote! {
-                match self {
-                    #(#matches,)*
-                    #wildcard
+            if matches.len() == 0 {
+                quote!(#wildcard)
+            } else {
+                let wildcard = wildcard.map(|w| quote!(_ => #w));
+
+                quote! {
+                    match self {
+                        #(#matches,)*
+                        #wildcard
+                    }
                 }
             }
         }

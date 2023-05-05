@@ -9,15 +9,20 @@ crate-type = ["cdylib"]
 
 [dependencies]
 proc-macro2 = { version = "1.0", features = ["span-locations"] }
-syn = { version = "=1.0.57", path = "syn", default-features = false, features = ["derive", "parsing", "printing", "full"] }
+syn = { version = "=2.0.15", default-features = false, features = ["derive", "parsing", "printing", "full"] }
 wasm-bindgen = "0.2.39"
 
 [build-dependencies]
 proc-macro2 = "1.0"
 quote = "1.0"
 serde_json = "1.0.39"
-syn-codegen = "0.2"
+syn-codegen = "0.3"
 
 [profile.release]
 opt-level = "z"
 lto = true
+
+[patch.crates-io]
+# We only add `syn` as a submodule because we need `syn.json` that isn't published to crates.io,
+# but since we have it now anyway, let's use it instead of downloading separate copy.
+syn = { path = "syn" }

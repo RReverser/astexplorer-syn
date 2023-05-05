@@ -30,7 +30,7 @@ extern "C" {
 fn new_object_with_type(ty: &'static str) -> Object {
     let obj = Object::new();
     obj.set("_type", ty.to_js());
-    obj.into()
+    obj
 }
 
 macro_rules! js {
@@ -87,7 +87,7 @@ impl<T: ToJS> ToJS for Option<T> {
 
 impl<T: ToJS> ToJS for Box<T> {
     fn to_js(&self) -> JsValue {
-        (&**self).to_js()
+        self.as_ref().to_js()
     }
 }
 
@@ -319,6 +319,12 @@ impl ToJS for syn::token::Brace {
 impl ToJS for syn::token::Bracket {
     fn to_js(&self) -> JsValue {
         js!(Bracket { span: self.span })
+    }
+}
+
+impl ToJS for proc_macro2::extra::DelimSpan {
+    fn to_js(&self) -> JsValue {
+        js!(DelimSpan { join: self.join() })
     }
 }
 
