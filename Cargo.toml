@@ -1,8 +1,8 @@
 [package]
 name = "astexplorer-syn"
-version = "1.0.57"
+version = "2.0.15"
 authors = ["Ingvar Stepanyan <me@rreverser.com>"]
-edition = "2018"
+edition = "2021"
 
 [lib]
 crate-type = ["cdylib"]
